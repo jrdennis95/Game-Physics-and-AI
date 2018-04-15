@@ -39,12 +39,21 @@ static GLDebugDrawer	sDebugDrawer;
 
 void INM377ProjTemplateTorqueOrient::BoidGroupInit() {
 	std::vector<Boids*> boids;
-	boids.reserve(150);
+	int x = 150;
+	int y = 1;
+	std::vector<Objects*> objects;
+	boids.reserve(x);
+	objects.reserve(y);
 
-	for (int i = 0; i < 150; i++) {
+	for (int i = 0; i < x; i++) {
 		boids.push_back(new Boids());
 	}
-	group.SpawnBoidGroup(boids);
+
+	for (int i = 0; i < y; i++) {
+		objects.push_back(new Objects());
+	}
+
+	group.SpawnBoidGroup(boids, objects);
 }
 
 void INM377ProjTemplateTorqueOrient::CreateBoids() {
@@ -53,12 +62,24 @@ void INM377ProjTemplateTorqueOrient::CreateBoids() {
 	}
 }
 
+void INM377ProjTemplateTorqueOrient::CreateObjects() {
+	for (int i = 0; i < 1; i++) {
+		AddObjects(i, btVector3(10, 1, 10));
+	}
+}
 void INM377ProjTemplateTorqueOrient::AddBoids(int &i, btVector3 &pos) {
 
 	group.boidsArray[i]->SetPosition(pos);
 	m_collisionShapes.push_back(group.boidsArray[i]->GetShape());
 	group.boidsArray[i]->boid = localCreateRigidBody(1.0f, group.boidsArray[i]->GetTransform(), group.boidsArray[i]->GetShape());
 	group.boidsArray[i]->SetActive();
+}
+
+void INM377ProjTemplateTorqueOrient::AddObjects(int &i, btVector3 &pos) {
+	group.objectsArray[i]->SetPosition(pos);
+	m_collisionShapes.push_back(group.objectsArray[i]->GetShape());
+	group.objectsArray[i]->object = localCreateRigidBody(100000, group.objectsArray[i]->GetTransform(), group.objectsArray[i]->GetShape());
+	group.objectsArray[i]->SetActive();
 }
 
 
@@ -208,6 +229,7 @@ void	INM377ProjTemplateTorqueOrient::initPhysics()
 	///create a few basic rigid bodies
 	CreateGround();
 	CreateBoids();
+	CreateObjects();
 
 }
 

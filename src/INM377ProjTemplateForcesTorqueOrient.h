@@ -94,7 +94,9 @@ class INM377ProjTemplateTorqueOrient : public PlatformDemoApplication
 
 	void BoidGroupInit();
 	void CreateBoids();
+	void CreateObjects();
 	void AddBoids(int &i, btVector3 &pos);
+	void AddObjects(int &i, btVector3 &pos);
 
 	void INM377ProjTemplateTorqueOrient::CreateGround();
 

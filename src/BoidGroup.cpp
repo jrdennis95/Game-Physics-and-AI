@@ -11,12 +11,18 @@ BoidGroup::~BoidGroup()
 		delete boidsArray[i];
 	}
 	boidsArray.clear();
+
+	for (unsigned int i = 0; i < objectsArray.size(); ++i) {
+		delete objectsArray[i];
+	}
+	objectsArray.clear();
 }
-void BoidGroup::SpawnBoidGroup(std::vector<Boids*> b) {
+void BoidGroup::SpawnBoidGroup(std::vector<Boids*> b, std::vector<Objects*> o) {
 	boidsArray = b;
+	objectsArray = o;
 }
 void BoidGroup::SpawnAdditional(btRigidBody* boidspawn) {
-	//boids.push_back(new Boids(boidspawn));
+	//boidsArray.push_back(new Boids(boidspawn));
 }
 
 btVector3 BoidGroup::Separation(Boids* boid, btScalar speed, btScalar force) {
@@ -24,16 +30,24 @@ btVector3 BoidGroup::Separation(Boids* boid, btScalar speed, btScalar force) {
 	int neighbours = 0;
 	int maxDetectionArea = 20;
 
-	for (unsigned int i = 0; i<boidsArray.size(); i++){
-		btRigidBody* neighbour = boidsArray[i]->boid;
-		if (neighbour != boid->boid) {
-			btScalar dist = boid->boid->getCenterOfMassPosition().distance(neighbour->getCenterOfMassPosition());
+	std::vector<btVector3> combined;
+	for (unsigned int i = 0; i < boidsArray.size(); i++) {
+		if (boidsArray[i]->boid != boid->boid) {
+			combined.push_back(boidsArray[i]->boid->getCenterOfMassPosition());
+		}
+	}
+	for (unsigned int i = 0; i < objectsArray.size(); i++) {
+		combined.push_back(objectsArray[i]->object->getCenterOfMassPosition()); //maybe wrong
+	}
+	for (unsigned int i = 0; i<combined.size(); i++){
+
+			btScalar dist = boid->boid->getCenterOfMassPosition().distance(combined[i]);
 			if (dist > 0 && dist < maxDetectionArea) {
-				btVector3 neighbourDist = neighbour->getCenterOfMassPosition();
+				btVector3 neighbourDist = combined[i];
 				btVector3 temp = btVector3(btScalar(boid->boid->getCenterOfMassPosition().getX() - neighbourDist.getX()), btScalar(boid->boid->getCenterOfMassPosition().getY() - neighbourDist.getY()), btScalar(boid->boid->getCenterOfMassPosition().getZ() - neighbourDist.getZ())).safeNormalize() /dist;
 				basePosition += temp;
 				neighbours++;
-			}
+
 		}
 	}
 

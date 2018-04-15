@@ -13,17 +13,18 @@ class btDefaultCollisionConfiguration;
 class Objects
 {
 public:
-	btConvexHullShape* bShape;
 	
 	Objects::Objects();
 	Objects::Objects(btRigidBody* objectRigidBody);
 	Objects::~Objects();
 	btRigidBody* object;
-	btConvexHullShape * objectShape;
-	btConvexHullShape* oShape;
+	btCylinderShape* objectShape;
+	//btConvexHullShape* oShape;
 	btTransform bShapeTrans;
 	void Objects::SpawnObjectGroup(std::vector<Objects*> b);
 	void Objects::SetPosition(const btVector3 &position);
 	void Objects::SetActive();
+	btCylinderShape* GetShape() { return objectShape; };
+	btTransform GetTransform() { return bShapeTrans; };
 };
 

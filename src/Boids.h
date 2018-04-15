@@ -22,7 +22,7 @@ struct Boids {
 	Boids::~Boids();
 	Boids::Boids(btRigidBody* boidRigidBody);
 
-	btConvexHullShape * boidShape;
+	btConvexHullShape* boidShape;
 	btTransform boidTransform;
 	btRigidBody* boid;
 

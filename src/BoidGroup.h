@@ -1,4 +1,5 @@
 #include "Boids.h"
+#include "Objects.h"
 #include <vector>
 
 class BoidGroup {
@@ -9,10 +10,11 @@ public:
 	BoidGroup();
 	~BoidGroup();
 	std::vector<Boids*> boidsArray;
+	std::vector<Objects*> objectsArray;
 	btScalar speed;
 	btScalar force;
 
-	void SpawnBoidGroup(std::vector<Boids*> boidsArray);
+	void SpawnBoidGroup(std::vector<Boids*> b, std::vector<Objects*> o);
 	void SpawnAdditional(btRigidBody* boidspawn);
 	void UpdateBoidGroup();
 };
