@@ -23,6 +23,7 @@
     <ClCompile Include="src\Boids.cpp" />
     <ClCompile Include="src\INM377ProjTemplateForcesTorqueOrient.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Objects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BoidGroup.h" />
@@ -30,6 +31,7 @@
     <ClInclude Include="src\INM377ProjTemplateForcesTorqueOrient.h">
       <DeploymentContent>false</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="src\Objects.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4CEF6686-5339-0643-B860-BFE2518BD7E8}</ProjectGuid>
