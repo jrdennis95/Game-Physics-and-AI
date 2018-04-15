@@ -7,4 +7,5 @@
   Note: including lib: glut32.lib
   
 src\INM377ProjTemplateForcesTorqueOrient.cpp(45): warning C4316: 'Boids': object allocated on the heap may not be aligned 16
-  INM377ProjTemplateForcesTorqueOrient.vcxproj -> C:\Users\Jay-Russell Dennis\Desktop\Game Physics and AI\.\INM377ProjTemplateForcesTorqueOrient_debug.exe
+  LINK : .\INM377ProjTemplateForcesTorqueOrient_debug.exe not found or not built by the last incremental link; performing full link
+  INM377ProjTemplateForcesTorqueOrient.vcxproj -> C:\Users\Jay-Russell Dennis\Desktop\Game-Physics-and-AI\.\INM377ProjTemplateForcesTorqueOrient_debug.exe
