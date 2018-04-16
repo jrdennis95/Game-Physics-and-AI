@@ -28,7 +28,7 @@ void BoidGroup::SpawnAdditional(btRigidBody* boidspawn) {
 btVector3 BoidGroup::Separation(Boids* boid, btScalar speed, btScalar force) {
 	btVector3 basePosition(0, 0, 0);
 	int neighbours = 0;
-	int maxDetectionArea = 20;
+	int maxDetectionArea = 30;
 
 	std::vector<btVector3> combined;
 	for (unsigned int i = 0; i < boidsArray.size(); i++) {
@@ -105,7 +105,7 @@ btVector3 BoidGroup::Alignment(Boids* boid, btScalar speed, btScalar force) {
 btVector3 BoidGroup::Cohesion(Boids* boid) {
 	btVector3 basePosition = btVector3(0, 0, 0);
 	int neighbours = 0;
-	int maxDetectionArea = 40;
+	int maxDetectionArea = 50;
 	btAlignedObjectArray<btVector3> posArray;
 
 	for (unsigned int i = 0; i<boidsArray.size(); i++) {
@@ -141,9 +141,8 @@ void BoidGroup::UpdateBoidGroup() {
 		btRigidBody* bbody0 = body0->boid;
 		btVector3 a = Alignment(body0, 20, 2);
 			btVector3 b = Separation(body0, 20, 2) * 2;
-			btVector3 c = Cohesion(body0);
-		btVector3 allforces = Alignment(body0, 20, 2) + Separation(body0, 20, 2) + Cohesion(body0);
-		btVector3 all2 = allforces;
+			btVector3 c = Cohesion(body0) * 2;
+		btVector3 allforces = a + b + c;
 		if (allforces.getX() == 0 && allforces.getY() == 0 && allforces.getZ() == 0) {
 			allforces = btVector3(1, 0, 1);
 		}
@@ -158,7 +157,7 @@ void BoidGroup::UpdateBoidGroup() {
 		btVector3 front = btrans * btVector3(1, 0, 0);
 		btVector3 bdir = bvel.safeNormalize();
 		btVector3 avel = bbody0->getAngularVelocity();
-		btVector3 bthrust = 4.f * front;
+		btVector3 bthrust = 2.5f * front;
 		btVector3 bdrag = btScalar(-3) * bvel;
 		btVector3 blift = body0->BoundaryHeight() - bgravity;
 
@@ -167,6 +166,20 @@ void BoidGroup::UpdateBoidGroup() {
 		bbody0->applyTorque((- 0.5 * up) * bmass);
 		bbody0->applyTorque((0.5 * btop.cross(up) + (-5.0 * avel)) * bmass);
 
+		bbody0->applyTorque(((-5.0 * avel) + body0->Avoid(objectsArray)) * bmass);
+
+		for (unsigned int j = 0; j < objectsArray.size(); j++) {
+			btScalar radius = objectsArray[j]->GetRadius() + 10;
+			btVector3 origin = objectsArray[j]->object->getCenterOfMassPosition();
+			btVector3 pos1 = btVector3(origin.getX(), 0, origin.getZ());
+			btVector3 pos2 = btVector3(bbody0->getCenterOfMassPosition().getX(), 0, bbody0->getCenterOfMassPosition().getZ());
+			btScalar dist = pos2.distance(pos1);
+
+			if (dist <= radius) {
+			}
+		}
+
+		//Boundary avoidance
 		if (body0->BoundaryWidth() == true) {
 			bbody0->applyTorque(btVector3(0,2,0) * bmass);
 		}

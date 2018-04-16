@@ -27,7 +27,7 @@ void Objects::SetPosition(const btVector3 &position) {
 	bShapeTrans = btTransform();
 	bShapeTrans.setIdentity();
 	bShapeTrans.setOrigin(position);
-	objectShape = new btCylinderShape(btVector3(20, 100, 20));
+	objectShape = new btCylinderShape(btVector3(radius, 100, radius));
 	btScalar bmass(1.0f);
 	btVector3 bLocalInertia(0, 0, 0);
 	objectShape->calculateLocalInertia(bmass, bLocalInertia);

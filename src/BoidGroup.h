@@ -2,6 +2,7 @@
 #include "Objects.h"
 #include <vector>
 
+
 class BoidGroup {
 	btVector3 Alignment(Boids *boid, btScalar speed, btScalar force);
 	btVector3 Cohesion(Boids *boid);

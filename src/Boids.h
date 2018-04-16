@@ -1,6 +1,7 @@
 #pragma once
 #include "btBulletDynamicsCommon.h"
 #include <vector>
+#include "Objects.h"
 
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -31,6 +32,7 @@ struct Boids {
 	btVector3 Boids::Movement(const btVector3 &point);
 	bool Boids::BoundaryWidth();
 	btVector3 Boids::BoundaryHeight();
+	btVector3 Boids::Avoid(std::vector<Objects*> &objects);
 	btConvexHullShape* GetShape() { return bShape; };
 	btTransform GetTransform() { return bShapeTrans; };
 };
