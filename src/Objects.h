@@ -19,10 +19,8 @@ public:
 	Objects::~Objects();
 	btRigidBody* object;
 	btCylinderShape* objectShape;
-	//btConvexHullShape* oShape;
 	btScalar radius = 20;
 	btTransform bShapeTrans;
-	void Objects::SpawnObjectGroup(std::vector<Objects*> b);
 	void Objects::SetShape(const btVector3 &position);
 	void Objects::SetActive();
 	btCylinderShape* GetShape() { return objectShape; };

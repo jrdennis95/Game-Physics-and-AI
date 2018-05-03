@@ -14,6 +14,7 @@ Objects::Objects(btRigidBody* o)
 	object = o;
 	objectShape = nullptr;
 }
+//Destructor for the objects array
 Objects::~Objects() 
 {
 	for (unsigned int i = 0; i < objectsArray.size(); ++i) {
@@ -23,6 +24,8 @@ Objects::~Objects()
 	delete object;
 	delete objectShape;
 }
+
+//Creates the object shape and values
 void Objects::SetShape(const btVector3 &position) {
 	bShapeTrans = btTransform();
 	bShapeTrans.setIdentity();
@@ -33,8 +36,8 @@ void Objects::SetShape(const btVector3 &position) {
 	objectShape->calculateLocalInertia(bmass, bLocalInertia);
 }
 
+//Activates the object
 void Objects::SetActive() {
-
 	object->setAnisotropicFriction(objectShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
 	object->setFriction(0.5);
 	object->activate(true);

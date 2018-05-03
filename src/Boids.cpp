@@ -18,6 +18,7 @@ Boids::~Boids() {
 	delete boidShape;
 }
 
+//Creates the boid shape and values
 void Boids::SetShape(const btVector3 &position) {
 	bShapeTrans = btTransform();
 	bShapeTrans.setIdentity();
@@ -30,20 +31,22 @@ void Boids::SetShape(const btVector3 &position) {
 	bShape->calculateLocalInertia(bmass, bLocalInertia);
 }
 
+//Activates the boid
 void Boids::SetActive() {
-	
 	boid->setAnisotropicFriction(bShape->getAnisotropicRollingFrictionDirection(), btCollisionObject::CF_ANISOTROPIC_ROLLING_FRICTION);
 	boid->setFriction(0.5);
 	boid->setLinearVelocity(btVector3(1, 0, 0));
 	boid->activate(true);
 }
 
+//Calculates force needed to reach a position
 btVector3 Boids::Movement(const btVector3 &point) {
 	btVector3 endPos = (point - boid->getCenterOfMassPosition()).normalize() * btScalar(20);
 	btVector3 endForce = (endPos - boid->getLinearVelocity()).normalize() * btScalar(2);
 	return endForce;
 }
 
+//Check to see if the boid exits the boundary height
 btVector3 Boids::BoundaryHeight() {
 	if (boid->getCenterOfMassPosition().getY() > 70) {
 		return btVector3(0, -6, 0);

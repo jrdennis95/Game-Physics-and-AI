@@ -12,9 +12,6 @@ struct btCollisionAlgorithmCreateFunc;
 class btDefaultCollisionConfiguration;
 
 struct Boids {
-	enum class BoidsStats {
-		SPEED
-	};
 
 	btConvexHullShape* bShape;
 	btTransform bShapeTrans;

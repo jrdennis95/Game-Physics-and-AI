@@ -2,7 +2,10 @@
 
 std::vector<Boids*> boidsArray;
 
+//Empty Constructor
 BoidGroup::BoidGroup() {}
+
+//Destructor
 BoidGroup::~BoidGroup() 
 {
 	for (unsigned int i = 0; i < boidsArray.size(); ++i) {
@@ -15,12 +18,14 @@ BoidGroup::~BoidGroup()
 	}
 	objectsArray.clear();
 }
+
+//Main Constructor
 void BoidGroup::SpawnBoidGroup(std::vector<Boids*> b, std::vector<Objects*> o) {
 	boidsArray = b;
 	objectsArray = o;
 }
 
-
+//Separates the boids from eachother and the objects
 btVector3 BoidGroup::Separation(Boids* boid, btScalar speed, btScalar force) {
 	btVector3 basePosition(0, 0, 0);
 	int neighbours = 0;
@@ -35,6 +40,7 @@ btVector3 BoidGroup::Separation(Boids* boid, btScalar speed, btScalar force) {
 	for (unsigned int i = 0; i < objectsArray.size(); i++) {
 		combined.push_back(objectsArray[i]->object->getCenterOfMassPosition());
 	}
+	//If the distance is within the detection area, subtract the positions and add it to the base position
 	for (unsigned int i = 0; i<combined.size(); i++){
 
 			btScalar dist = boid->boid->getCenterOfMassPosition().distance(combined[i]);
@@ -58,6 +64,7 @@ btVector3 BoidGroup::Separation(Boids* boid, btScalar speed, btScalar force) {
 	return alignvalue;
 }
 
+//Aligns the boids to all face the same direction
 btVector3 BoidGroup::Alignment(Boids* boid, btScalar speed, btScalar force) {
 	btVector3 baseVel = btVector3(0, 0, 0);
 	int neighbours = 0;
@@ -69,6 +76,7 @@ btVector3 BoidGroup::Alignment(Boids* boid, btScalar speed, btScalar force) {
 		if (neighbour != boid->boid) {
 			btScalar dist = boid->boid->getCenterOfMassPosition().distance(neighbour->getCenterOfMassPosition());
 
+			//If the distance is within the detection area, add the positions and set the base position to it
 			if (dist > 0 && dist < maxDetectionArea) {
 				baseVel = btVector3(baseVel.getX() + neighbour->getLinearVelocity().getX(), baseVel.getY() + neighbour->getLinearVelocity().getY(), baseVel.getZ() + neighbour->getLinearVelocity().getZ());
 				neighbours++;
@@ -89,6 +97,7 @@ btVector3 BoidGroup::Alignment(Boids* boid, btScalar speed, btScalar force) {
 	return alignvalue;
 }
 
+//Brings the boids closer together
 btVector3 BoidGroup::Cohesion(Boids* boid) {
 	btVector3 basePosition = btVector3(0, 0, 0);
 	int neighbours = 0;
@@ -101,7 +110,7 @@ btVector3 BoidGroup::Cohesion(Boids* boid) {
 		if (neighbour != boid->boid) {
 			btScalar dist = boid->boid->getCenterOfMassPosition().distance(neighbour->getCenterOfMassPosition());
 
-
+			//If the distance is within the detection area, add the positions and add it to the base position
 			if (dist > 0 && dist < maxDetectionArea) {
 				basePosition += btVector3(btScalar(boid->boid->getCenterOfMassPosition().getX() + neighbour->getCenterOfMassPosition().getX()), btScalar(boid->boid->getCenterOfMassPosition().getY() + neighbour->getCenterOfMassPosition().getY()), btScalar(boid->boid->getCenterOfMassPosition().getZ() + neighbour->getCenterOfMassPosition().getZ())).normalize() / dist;
 				neighbours++;
@@ -113,7 +122,8 @@ btVector3 BoidGroup::Cohesion(Boids* boid) {
 		return basePosition;
 	}
 
-	basePosition /= btScalar(neighbours);
+	btScalar neighboursScalar = btScalar(neighbours);
+	basePosition /= neighboursScalar;
 	basePosition = boid->Movement(basePosition);
 	return basePosition;
 }
@@ -123,7 +133,7 @@ void BoidGroup::UpdateBoidGroup() {
 
 		Boids* body0 = boidsArray[i];
 		btRigidBody* bbody0 = body0->boid;
-		btVector3 allforces = (Alignment(body0, 20, 15)) + (Separation(body0, 20, 2) * 2) + (Cohesion(body0) * 2);
+		btVector3 allforces = (Alignment(body0, 20, 20)) + (Separation(body0, 20, 2) * 2) + (Cohesion(body0) * 2);
 		if (allforces.getX() == 0 && allforces.getY() == 0 && allforces.getZ() == 0) {
 			allforces = btVector3(1, 0, 1);
 		}
@@ -131,7 +141,6 @@ void BoidGroup::UpdateBoidGroup() {
 		btScalar bmass = bbody0->getInvMass();
 		btVector3 bvel = bbody0->getLinearVelocity();
 		btVector3 bgravity = bbody0->getGravity();
-
 		btTransform btrans(bbody0->getOrientation());
 		btVector3 up(0, 1, 0);
 		btVector3 btop = btrans * up;
@@ -147,7 +156,7 @@ void BoidGroup::UpdateBoidGroup() {
 		bbody0->applyTorque((- 0.5 * up) * bmass);
 		bbody0->applyTorque((0.5 * btop.cross(up) + (-5.0 * avel)) * bmass);
 
-		//Obstacle avoidance
+		//Avoid the objects by using an invisible forcefield and applying a force using the inverse square law
 
 		for (unsigned int j = 0; j < objectsArray.size(); j++) {
 			btScalar intensity1 = 22.5f;
@@ -162,7 +171,7 @@ void BoidGroup::UpdateBoidGroup() {
 			}
 		}
 
-		//Boundary avoidance
+		//Avoid the objects by bringing the objects closer to the middle when they exit the area
 		
 		btScalar intensity2 = 40.f;
 		btVector3 pos3 = btVector3(0, bbody0->getCenterOfMassPosition().getY(), 0);
