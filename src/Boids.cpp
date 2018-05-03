@@ -49,7 +49,7 @@ btVector3 Boids::Avoid(std::vector<Objects*> &objects) {
 		btVector3 a = boid->getCenterOfMassPosition();
 		btVector3 b = boid->getLinearVelocity();
 			//if (p.length() < v && b.length() < objects[i]->GetRadius() + 20) {
-		btScalar radius = object->GetRadius() * 40;
+		btScalar radius = object->GetRadius() + 10;
 		btVector3 origin = objectRB->getCenterOfMassPosition();
 		btVector3 boidpos = boid->getCenterOfMassPosition();
 		btVector3 pos1 = btVector3(origin.getX(), 0, origin.getZ());
@@ -57,7 +57,8 @@ btVector3 Boids::Avoid(std::vector<Objects*> &objects) {
 		btScalar dist = pos2.distance(pos1);
 
 			if(dist <= radius){
-				btVector3 target(boid->getCenterOfMassPosition());
+				break;
+				/*btVector3 target(boid->getCenterOfMassPosition());
 				btVector3 vector1 = target - origin;
 				btVector3 top(origin.getX(), 0, origin.getZ() + 1);
 				float angle = atan2(vector1.getX(), vector1.getZ()) - atan2(top.getX(), top.getZ());
@@ -97,7 +98,7 @@ btVector3 Boids::Avoid(std::vector<Objects*> &objects) {
 					}
 				}
 				else
-					final = btVector3(0, turn, 0);
+					final = btVector3(0, turn, 0);*/
 			} else 
 				final = btVector3(0, 0, 0);
 	}
@@ -111,16 +112,17 @@ btVector3 Boids::Movement(const btVector3 &point) {
 }
 
 bool Boids::BoundaryWidth() {
-	bool boundary = false;
 	if (btVector3(0, 0, 0).distance(boid->getCenterOfMassPosition()) > 150) {
-		boundary = true;
+		return true;
 	}
-	return boundary;
+	else {
+		return false;
+	}
 }
 
 btVector3 Boids::BoundaryHeight() {
 	if (btScalar(100) - boid->getCenterOfMassPosition().getY() < 30) {
-		return btVector3(0, -3, 0);
+		return btVector3(0, -6, 0);
 	}
 	else if (boid->getCenterOfMassPosition().getY() < 30) {
 		return btVector3(0, 3, 0);

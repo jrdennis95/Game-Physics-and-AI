@@ -39,8 +39,8 @@ static GLDebugDrawer	sDebugDrawer;
 
 void INM377ProjTemplateTorqueOrient::BoidGroupInit() {
 	std::vector<Boids*> boids;
-	int x = 40;
-	int y = 1; //14
+	int x = 50;
+	int y = 14; //14
 	std::vector<Objects*> objects;
 	boids.reserve(x);
 	objects.reserve(y);
@@ -61,8 +61,8 @@ void INM377ProjTemplateTorqueOrient::CreateBoids() {
 		AddBoids(i, btVector3(-200, 2, -200));
 	*/
 	
-	for (int i = 0; i < 40; i++) {
-		AddBoids(i, btVector3((rand() % (400 + 1 - 0) + 0)-200, 2, (rand() % (400 + 1 - 0) + 0)));
+	for (int i = 0; i < 50; i++) {
+		AddBoids(i, btVector3((rand() % (400 + 1 - 0) + 0)-800, 2, (rand() % (400 + 1 - 0) + 0)));
 	}
 	
 }
@@ -71,7 +71,7 @@ void INM377ProjTemplateTorqueOrient::CreateObjects() {
 	std::vector<btVector3> pos = {
 		btVector3(10, 1, 10), btVector3(200, 1, 500), btVector3(200, 1, -500), btVector3(250, 1, 850), btVector3(300, 1, 600), btVector3(250, 1, 200), btVector3(250, 1, -200), btVector3(200, 1, 800), btVector3(200, 1, -800), btVector3(-300, 1, -350), btVector3(-700, 1, -500), btVector3(700, 1, -500), btVector3(-900, 1, -900), btVector3(900, 1, -900),
 	};
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 14; i++) {
 		AddObjects(i, pos[i]);
 	}
 }
