@@ -23,7 +23,7 @@ Objects::~Objects()
 	delete object;
 	delete objectShape;
 }
-void Objects::SetPosition(const btVector3 &position) {
+void Objects::SetShape(const btVector3 &position) {
 	bShapeTrans = btTransform();
 	bShapeTrans.setIdentity();
 	bShapeTrans.setOrigin(position);

@@ -27,12 +27,10 @@ struct Boids {
 	btTransform boidTransform;
 	btRigidBody* boid;
 
-	void Boids::SetPosition(const btVector3 &position);
+	void Boids::SetShape(const btVector3 &position);
 	void Boids::SetActive();
 	btVector3 Boids::Movement(const btVector3 &point);
-	bool Boids::BoundaryWidth();
 	btVector3 Boids::BoundaryHeight();
-	btVector3 Boids::Avoid(std::vector<Objects*> &objects);
 	btConvexHullShape* GetShape() { return bShape; };
 	btTransform GetTransform() { return bShapeTrans; };
 };
